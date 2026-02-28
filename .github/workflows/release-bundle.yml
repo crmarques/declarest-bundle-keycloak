@@ -35,11 +35,11 @@ jobs:
           python - <<'PY'
           import os
           import pathlib
-          import sys
+          import urllib.parse
           import yaml
 
           ref_name = os.getenv("REF_NAME", "")
-          root = pathlib.Path(".")
+          root = pathlib.Path(".").resolve()
           bundle_path = root / "bundle.yaml"
           if not bundle_path.exists():
               raise SystemExit("bundle.yaml not found")
@@ -73,9 +73,13 @@ jobs:
               raise SystemExit("declarest.metadataRoot is required")
 
           metadata_file_name = str(declarest.get("metadataFileName", "")).strip() or "metadata.json"
-          metadata_dir = root / metadata_root
+          metadata_dir = (root / metadata_root).resolve()
           if not metadata_dir.is_dir():
               raise SystemExit(f"metadata root {metadata_root!r} does not exist or is not a directory")
+          try:
+              metadata_dir.relative_to(root)
+          except ValueError:
+              raise SystemExit("declarest.metadataRoot must stay within repository root")
 
           found_metadata_file = any(
               path.name == metadata_file_name
@@ -86,31 +90,58 @@ jobs:
               raise SystemExit(
                   f"metadata root {metadata_root!r} does not contain {metadata_file_name!r}"
               )
+
+          openapi_ref = str(declarest.get("openapi", "")).strip()
+          if not openapi_ref:
+              raise SystemExit("declarest.openapi is required and must reference a bundled file")
+
+          parsed_openapi = urllib.parse.urlparse(openapi_ref)
+          if parsed_openapi.scheme:
+              raise SystemExit("declarest.openapi must be a relative file path inside the repository")
+
+          openapi_path = (root / openapi_ref).resolve()
+          try:
+              openapi_path.relative_to(root)
+          except ValueError:
+              raise SystemExit("declarest.openapi must stay within repository root")
+          if not openapi_path.is_file():
+              raise SystemExit(
+                  f"declarest.openapi file {openapi_ref!r} does not exist or is not a file"
+              )
           PY
 
       - name: Build bundle archive
         id: build-archive
         run: |
-          VERSION="$(python - <<'PY'
+          readarray -t MANIFEST_VALUES < <(python - <<'PY'
+          import urllib.parse
           import yaml
-          with open('bundle.yaml', 'r', encoding='utf-8') as fh:
+
+          with open("bundle.yaml", "r", encoding="utf-8") as fh:
               manifest = yaml.safe_load(fh) or {}
-          print(str(manifest.get('version', '')).strip())
+
+          name = str(manifest.get("name", "")).strip()
+          version = str(manifest.get("version", "")).strip()
+          declarest = manifest.get("declarest") or {}
+          openapi_ref = str(declarest.get("openapi", "")).strip()
+
+          if urllib.parse.urlparse(openapi_ref).scheme:
+              openapi_ref = ""
+
+          print(name)
+          print(version)
+          print(openapi_ref)
           PY
-          )"
-          NAME="$(python - <<'PY'
-          import yaml
-          with open('bundle.yaml', 'r', encoding='utf-8') as fh:
-              manifest = yaml.safe_load(fh) or {}
-          print(str(manifest.get('name', '')).strip())
-          PY
-          )"
-          if [ -z "$VERSION" ] || [ -z "$NAME" ]; then
-            echo "bundle.yaml name/version missing"
+          )
+          NAME="${MANIFEST_VALUES[0]}"
+          VERSION="${MANIFEST_VALUES[1]}"
+          OPENAPI_PATH="${MANIFEST_VALUES[2]}"
+          if [ -z "$VERSION" ] || [ -z "$NAME" ] || [ -z "$OPENAPI_PATH" ]; then
+            echo "bundle.yaml name/version/declarest.openapi missing"
             exit 1
           fi
           ARCHIVE="${NAME}-${VERSION}.tar.gz"
-          tar -czf "$ARCHIVE" bundle.yaml metadata
+          tar -czf "$ARCHIVE" bundle.yaml metadata "$OPENAPI_PATH"
           echo "archive=$ARCHIVE" >> "$GITHUB_OUTPUT"
 
       - name: Publish release asset

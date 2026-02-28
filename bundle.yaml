@@ -7,6 +7,7 @@ description: Metadata bundle for Keycloak Admin REST API.
 home: https://github.com/crmarques/declarest-bundle-keycloak
 sources:
   - https://github.com/crmarques/declarest-bundle-keycloak
+  - https://www.keycloak.org/docs-api/26.2.5/rest-api/openapi.yaml
 keywords:
   - declarest
   - keycloak
@@ -21,6 +22,7 @@ maintainers:
 declarest:
   shorthand: keycloak-bundle
   metadataRoot: metadata
+  openapi: openapi.yaml
   metadataFileName: metadata.json
   resourceFormat: json
   compatibleDeclarest: ">=0.1.0"
