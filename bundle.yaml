@@ -2,7 +2,7 @@ apiVersion: declarest.io/v1alpha1
 kind: MetadataBundle
 
 name: keycloak
-version: 0.1.0
+version: 0.0.1
 description: Metadata bundle for Keycloak Admin REST API.
 home: https://github.com/crmarques/declarest-bundle-keycloak
 sources:
