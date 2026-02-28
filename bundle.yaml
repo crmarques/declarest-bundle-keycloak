@@ -1,7 +1,7 @@
 apiVersion: declarest.io/v1alpha1
 kind: MetadataBundle
 
-name: keycloak
+name: keycloak-bundle
 version: 0.0.1
 description: Metadata bundle for Keycloak Admin REST API.
 home: https://github.com/crmarques/declarest-bundle-keycloak
@@ -19,7 +19,7 @@ maintainers:
     url: https://github.com/crmarques
 
 declarest:
-  shorthand: keycloak
+  shorthand: keycloak-bundle
   metadataRoot: metadata
   metadataFileName: metadata.json
   resourceFormat: json
@@ -31,7 +31,7 @@ declarest:
 distribution:
   repo: crmarques/declarest-bundle-keycloak
   tagTemplate: "v{version}"
-  artifactTemplate: "declarest-bundle-keycloak-{version}.tar.gz"
+  artifactTemplate: "keycloak-bundle-{version}.tar.gz"
 
 annotations:
   org.opencontainers.image.source: https://github.com/crmarques/declarest-bundle-keycloak

@@ -12,10 +12,10 @@ Tag releases must follow `v<version>` where `<version>` matches `bundle.yaml` `v
 
 Published archive naming contract:
 
-- `declarest-bundle-keycloak-<version>.tar.gz`
+- `keycloak-bundle-<version>.tar.gz`
 
 The release workflow validates:
 
 - `bundle.yaml` version matches tag
-- `distribution.artifactTemplate` matches `declarest-bundle-<name>-{version}.tar.gz`
+- `distribution.artifactTemplate` matches `<name>-{version}.tar.gz`
 - `declarest.metadataRoot` exists and contains metadata definitions

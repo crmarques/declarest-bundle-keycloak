@@ -60,7 +60,7 @@ jobs:
 
           distribution = manifest.get("distribution") or {}
           artifact_template = str(distribution.get("artifactTemplate", "")).strip()
-          expected_template = f"declarest-bundle-{name}-{{version}}.tar.gz"
+          expected_template = f"{name}-{{version}}.tar.gz"
           if artifact_template != expected_template:
               raise SystemExit(
                   "artifact template mismatch: "
@@ -109,7 +109,7 @@ jobs:
             echo "bundle.yaml name/version missing"
             exit 1
           fi
-          ARCHIVE="declarest-bundle-${NAME}-${VERSION}.tar.gz"
+          ARCHIVE="${NAME}-${VERSION}.tar.gz"
           tar -czf "$ARCHIVE" bundle.yaml metadata
           echo "archive=$ARCHIVE" >> "$GITHUB_OUTPUT"
 
