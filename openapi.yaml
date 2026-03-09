@@ -18,6 +18,7 @@ tags:
 - name: Identity Providers
 - name: Key
 - name: Organizations
+  x-smallrye-profile-admin: ""
 - name: Protocol Mappers
 - name: Realms Admin
 - name: Role Mapper
@@ -25,6 +26,7 @@ tags:
 - name: Roles (by ID)
 - name: Scope Mappings
 - name: Users
+- name: Workflows
 paths:
   /admin/realms:
     get:
@@ -342,6 +344,8 @@ paths:
       responses:
         "201":
           description: Created
+        "409":
+          description: Conflict
       deprecated: true
     parameters:
     - name: realm
@@ -513,6 +517,8 @@ paths:
       responses:
         "201":
           description: Created
+        "409":
+          description: Conflict
     parameters:
     - name: realm
       in: path
@@ -623,6 +629,8 @@ paths:
       responses:
         "201":
           description: Created
+        "409":
+          description: Conflict
     parameters:
     - name: realm
       in: path
@@ -653,6 +661,8 @@ paths:
       responses:
         "201":
           description: Created
+        "409":
+          description: Conflict
     parameters:
     - name: realm
       in: path
@@ -700,6 +710,8 @@ paths:
       responses:
         "204":
           description: No Content
+        "409":
+          description: Conflict
     parameters:
     - name: realm
       in: path
@@ -756,6 +768,8 @@ paths:
       responses:
         "201":
           description: Created
+        "409":
+          description: Conflict
     parameters:
     - name: realm
       in: path
@@ -800,6 +814,8 @@ paths:
       responses:
         "204":
           description: No Content
+        "409":
+          description: Conflict
     delete:
       tags:
       - Authentication Management
@@ -1287,7 +1303,7 @@ paths:
     post:
       tags:
       - Client Scopes
-      summary: Create a new client scope Client Scopeâ€™s name must be unique!
+      summary: Create a new client scope Client Scope’s name must be unique!
       requestBody:
         content:
           application/json:
@@ -1415,8 +1431,10 @@ paths:
             schema:
               $ref: '#/components/schemas/ProtocolMapperRepresentation'
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
+        "409":
+          description: Conflict
     parameters:
     - name: realm
       in: path
@@ -1766,8 +1784,8 @@ paths:
     get:
       tags:
       - Scope Mappings
-      summary: Get effective realm-level roles associated with the clientâ€™s scope
-        What this does is recurse any composite roles associated with the clientâ€™s
+      summary: Get effective realm-level roles associated with the client’s scope
+        What this does is recurse any composite roles associated with the client’s
         scope and adds the roles to this lists.
       description: The method is really to show a comprehensive total view of realm-level
         roles associated with the client.
@@ -1847,7 +1865,7 @@ paths:
     post:
       tags:
       - Client Scopes
-      summary: Create a new client scope Client Scopeâ€™s name must be unique!
+      summary: Create a new client scope Client Scope’s name must be unique!
       requestBody:
         content:
           application/json:
@@ -1975,8 +1993,10 @@ paths:
             schema:
               $ref: '#/components/schemas/ProtocolMapperRepresentation'
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
+        "409":
+          description: Conflict
     parameters:
     - name: realm
       in: path
@@ -2326,8 +2346,8 @@ paths:
     get:
       tags:
       - Scope Mappings
-      summary: Get effective realm-level roles associated with the clientâ€™s scope
-        What this does is recurse any composite roles associated with the clientâ€™s
+      summary: Get effective realm-level roles associated with the client’s scope
+        What this does is recurse any composite roles associated with the client’s
         scope and adds the roles to this lists.
       description: The method is really to show a comprehensive total view of realm-level
         roles associated with the client.
@@ -2398,9 +2418,9 @@ paths:
       tags:
       - Clients
       summary: Get clients belonging to the realm.
-      description: "If a client canâ€™t be retrieved from the storage due to a problem\
+      description: "If a client can’t be retrieved from the storage due to a problem\
         \ with the underlying storage, it is silently removed from the returned list.\
-        \ This ensures that concurrent modifications to the list donâ€™t prevent callers\
+        \ This ensures that concurrent modifications to the list don’t prevent callers\
         \ from retrieving this list."
       parameters:
       - name: clientId
@@ -2448,7 +2468,7 @@ paths:
     post:
       tags:
       - Clients
-      summary: Create a new client Clientâ€™s client_id must be unique!
+      summary: Create a new client Client’s client_id must be unique!
       requestBody:
         content:
           application/json:
@@ -2457,6 +2477,8 @@ paths:
       responses:
         "201":
           description: Created
+        "409":
+          description: Conflict
     parameters:
     - name: realm
       in: path
@@ -2542,8 +2564,12 @@ paths:
             schema:
               $ref: '#/components/schemas/ClientRepresentation'
       responses:
-        "200":
-          description: OK
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+        "409":
+          description: Conflict
     delete:
       tags:
       - Clients
@@ -4371,7 +4397,7 @@ paths:
       tags:
       - Clients
       summary: Register a cluster node with the client Manually register cluster node
-        to this client - usually itâ€™s not needed to call this directly as adapter
+        to this client - usually it’s not needed to call this directly as adapter
         should handle by sending registration request to Keycloak
       requestBody:
         content:
@@ -4610,8 +4636,10 @@ paths:
             schema:
               $ref: '#/components/schemas/ProtocolMapperRepresentation'
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
+        "409":
+          description: Conflict
     parameters:
     - name: realm
       in: path
@@ -4829,6 +4857,8 @@ paths:
           description: Forbidden
         "404":
           description: Not Found
+        "409":
+          description: Conflict
         "500":
           description: Internal Server Error
     parameters:
@@ -5513,8 +5543,8 @@ paths:
     get:
       tags:
       - Scope Mappings
-      summary: Get effective realm-level roles associated with the clientâ€™s scope
-        What this does is recurse any composite roles associated with the clientâ€™s
+      summary: Get effective realm-level roles associated with the client’s scope
+        What this does is recurse any composite roles associated with the client’s
         scope and adds the roles to this lists.
       description: The method is really to show a comprehensive total view of realm-level
         roles associated with the client.
@@ -6203,6 +6233,13 @@ paths:
         in: query
         schema:
           type: string
+      - name: subGroupsCount
+        in: query
+        description: "Boolean which defines whether to return the count of subgroups\
+          \ for each group (default: true"
+        schema:
+          default: "true"
+          type: boolean
       responses:
         "200":
           description: OK
@@ -6217,7 +6254,7 @@ paths:
       - Groups
       summary: create or add a top level realm groupSet or create child.
       description: This will update the group and set the parent if it exists. Create
-        it and set the parent if the group doesnâ€™t exist.
+        it and set the parent if the group doesn’t exist.
       requestBody:
         content:
           application/json:
@@ -6228,6 +6265,10 @@ paths:
           description: Created
         "204":
           description: No Content
+        "400":
+          description: Bad Request
+        "409":
+          description: Conflict
     parameters:
     - name: realm
       in: path
@@ -6288,8 +6329,12 @@ paths:
             schema:
               $ref: '#/components/schemas/GroupRepresentation'
       responses:
-        "200":
-          description: OK
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+        "409":
+          description: Conflict
     delete:
       tags:
       - Groups
@@ -6349,6 +6394,13 @@ paths:
           name
         schema:
           type: string
+      - name: subGroupsCount
+        in: query
+        description: "Boolean which defines whether to return the count of subgroups\
+          \ for each subgroup of this group (default: true"
+        schema:
+          default: "true"
+          type: boolean
       responses:
         "200":
           description: OK
@@ -6363,15 +6415,21 @@ paths:
       - Groups
       summary: Set or create child.
       description: This will just set the parent if it exists. Create it and set the
-        parent if the group doesnâ€™t exist.
+        parent if the group doesn’t exist.
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/GroupRepresentation'
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+        "409":
+          description: Conflict
     parameters:
     - name: realm
       in: path
@@ -6808,6 +6866,11 @@ paths:
           \ (default: false)"
         schema:
           type: boolean
+      - name: capability
+        in: query
+        description: Filter by identity providers capability
+        schema:
+          type: string
       - name: first
         in: query
         description: Pagination offset
@@ -6832,6 +6895,11 @@ paths:
           \ contains (*name*) or exact (\"name\"). Default prefixed."
         schema:
           type: string
+      - name: type
+        in: query
+        description: Filter by identity providers type
+        schema:
+          type: string
       responses:
         "200":
           description: OK
@@ -6851,8 +6919,12 @@ paths:
             schema:
               $ref: '#/components/schemas/IdentityProviderRepresentation'
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+        "409":
+          description: Conflict
     parameters:
     - name: realm
       in: path
@@ -6882,8 +6954,12 @@ paths:
             schema:
               $ref: '#/components/schemas/IdentityProviderRepresentation'
       responses:
-        "200":
-          description: OK
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+        "409":
+          description: Conflict
     delete:
       tags:
       - Identity Providers
@@ -7142,6 +7218,26 @@ paths:
             application/json:
               schema:
                 type: object
+    parameters:
+    - name: realm
+      in: path
+      description: realm name (not id!)
+      required: true
+      schema:
+        type: string
+  /admin/realms/{realm}/identity-provider/upload-certificate:
+    post:
+      tags:
+      - Client Attribute Certificate
+      summary: "Uploads a certificate, prepares the jwks or public key associated,\
+        \ and returns the certificate representation."
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateRepresentation'
     parameters:
     - name: realm
       in: path
@@ -7447,6 +7543,44 @@ paths:
       required: true
       schema:
         type: string
+  /admin/realms/{realm}/organizations/count:
+    get:
+      tags:
+      - Organizations
+      summary: Returns the organizations counts.
+      parameters:
+      - name: exact
+        in: query
+        description: Boolean which defines whether the param 'search' must match exactly
+          or not
+        schema:
+          type: boolean
+      - name: q
+        in: query
+        description: "A query to search for custom attributes, in the format 'key1:value2\
+          \ key2:value2'"
+        schema:
+          type: string
+      - name: search
+        in: query
+        description: A String representing either an organization name or domain
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                format: int64
+                type: integer
+    parameters:
+    - name: realm
+      in: path
+      description: realm name (not id!)
+      required: true
+      schema:
+        type: string
   /admin/realms/{realm}/organizations/members/{member-id}/organizations:
     get:
       tags:
@@ -7459,6 +7593,13 @@ paths:
         required: true
         schema:
           type: string
+      - name: briefRepresentation
+        in: query
+        description: "if false, return the full representation. Otherwise, only the\
+          \ basic fields are returned."
+        schema:
+          default: true
+          type: boolean
       responses:
         "200":
           description: ""
@@ -7503,6 +7644,8 @@ paths:
           description: No Content
         "400":
           description: Bad Request
+        "409":
+          description: Conflict
     delete:
       tags:
       - Organizations
@@ -7617,6 +7760,138 @@ paths:
           description: No Content
         "400":
           description: Bad Request
+        "404":
+          description: Not Found
+    parameters:
+    - name: realm
+      in: path
+      description: realm name (not id!)
+      required: true
+      schema:
+        type: string
+    - name: org-id
+      in: path
+      required: true
+      schema:
+        type: string
+  /admin/realms/{realm}/organizations/{org-id}/invitations:
+    get:
+      tags:
+      - Organizations
+      summary: Get invitations for the organization
+      parameters:
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: first
+        in: query
+        schema:
+          format: int32
+          type: integer
+      - name: firstName
+        in: query
+        schema:
+          type: string
+      - name: lastName
+        in: query
+        schema:
+          type: string
+      - name: max
+        in: query
+        schema:
+          format: int32
+          type: integer
+      - name: search
+        in: query
+        schema:
+          type: string
+      - name: status
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationInvitationRepresentation'
+    parameters:
+    - name: realm
+      in: path
+      description: realm name (not id!)
+      required: true
+      schema:
+        type: string
+    - name: org-id
+      in: path
+      required: true
+      schema:
+        type: string
+  /admin/realms/{realm}/organizations/{org-id}/invitations/{id}:
+    get:
+      tags:
+      - Organizations
+      summary: Get invitation by ID
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationInvitationRepresentation'
+        "404":
+          description: Not Found
+    delete:
+      tags:
+      - Organizations
+      summary: Delete an invitation
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+    parameters:
+    - name: realm
+      in: path
+      description: realm name (not id!)
+      required: true
+      schema:
+        type: string
+    - name: org-id
+      in: path
+      required: true
+      schema:
+        type: string
+  /admin/realms/{realm}/organizations/{org-id}/invitations/{id}/resend:
+    post:
+      tags:
+      - Organizations
+      summary: Resend an invitation
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
         "404":
           description: Not Found
     parameters:
@@ -7879,6 +8154,13 @@ paths:
         required: true
         schema:
           type: string
+      - name: briefRepresentation
+        in: query
+        description: "if false, return the full representation. Otherwise, only the\
+          \ basic fields are returned."
+        schema:
+          default: true
+          type: boolean
       responses:
         "200":
           description: ""
@@ -8038,6 +8320,8 @@ paths:
           description: Forbidden
         "404":
           description: Not Found
+        "409":
+          description: Conflict
         "500":
           description: Internal Server Error
     parameters:
@@ -8940,7 +9224,7 @@ paths:
       tags:
       - Users
       summary: Returns the number of users that match the given criteria.
-      description: "It can be called in three different ways. 1. Donâ€™t specify any\
+      description: "It can be called in three different ways. 1. Don’t specify any\
         \ criteria and pass {@code null}. The number of all users within that realm\
         \ will be returned. <p> 2. If {@code search} is specified other criteria such\
         \ as {@code last} will be ignored even though you set them. The {@code search}\
@@ -8952,11 +9236,13 @@ paths:
       parameters:
       - name: email
         in: query
-        description: email filter
+        description: "A String contained in email, or the complete email, if param\
+          \ \"exact\" is true"
         schema:
           type: string
       - name: emailVerified
         in: query
+        description: whether the email has been verified
         schema:
           type: boolean
       - name: enabled
@@ -8964,30 +9250,51 @@ paths:
         description: Boolean representing if user is enabled or not
         schema:
           type: boolean
+      - name: exact
+        in: query
+        description: "Boolean which defines whether the params \"last\", \"first\"\
+          , \"email\" and \"username\" must match exactly"
+        schema:
+          type: boolean
       - name: firstName
         in: query
-        description: first name filter
+        description: "A String contained in firstName, or the complete firstName,\
+          \ if param \"exact\" is true"
+        schema:
+          type: string
+      - name: idpAlias
+        in: query
+        description: The alias of an Identity Provider linked to the user
+        schema:
+          type: string
+      - name: idpUserId
+        in: query
+        description: The userId at an Identity Provider linked to the user
         schema:
           type: string
       - name: lastName
         in: query
-        description: last name filter
+        description: "A String contained in lastName, or the complete lastName, if\
+          \ param \"exact\" is true"
         schema:
           type: string
       - name: q
         in: query
+        description: "A query to search for custom attributes, in the format 'key1:value2\
+          \ key2:value2'"
         schema:
           type: string
       - name: search
         in: query
-        description: "arbitrary search string for all the fields below. Default search\
-          \ behavior is prefix-based (e.g., foo or foo*). Use *foo* for infix search\
-          \ and \"foo\" for exact search."
+        description: "A String contained in username, first or last name, or email.\
+          \ Default search behavior is prefix-based (e.g., foo or foo*). Use *foo*\
+          \ for infix search and \"foo\" for exact search."
         schema:
           type: string
       - name: username
         in: query
-        description: username filter
+        description: "A String contained in username, or the complete username, if\
+          \ param \"exact\" is true"
         schema:
           type: string
       responses:
@@ -9519,6 +9826,11 @@ paths:
         required: true
         schema:
           type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FederatedIdentityRepresentation'
       responses:
         "204":
           description: No Content
@@ -10259,6 +10571,258 @@ paths:
       required: true
       schema:
         type: string
+  /admin/realms/{realm}/workflows:
+    get:
+      tags:
+      - Workflows
+      summary: List workflows
+      description: List workflows filtered by name and paginated using first and max
+        parameters.
+      parameters:
+      - name: exact
+        in: query
+        description: Boolean which defines whether the param 'search' must match exactly
+          or not
+        schema:
+          type: boolean
+      - name: first
+        in: query
+        description: The position of the first result to be processed (pagination
+          offset)
+        schema:
+          format: int32
+          default: "0"
+          type: integer
+      - name: max
+        in: query
+        description: The maximum number of results to be returned - defaults to 10
+        schema:
+          format: int32
+          default: "10"
+          type: integer
+      - name: search
+        in: query
+        description: A String representing the workflow name - either partial or exact
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                $ref: '#/components/schemas/WorkflowRepresentation'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowRepresentation'
+        "400":
+          description: Bad Request
+    post:
+      tags:
+      - Workflows
+      summary: Create workflow
+      description: Create a new workflow from the provided representation.
+      requestBody:
+        content:
+          application/yaml:
+            schema:
+              $ref: '#/components/schemas/WorkflowRepresentation'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowRepresentation'
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+    parameters:
+    - name: realm
+      in: path
+      description: realm name (not id!)
+      required: true
+      schema:
+        type: string
+  /admin/realms/{realm}/workflows/scheduled/{resource-id}:
+    get:
+      tags:
+      - Workflows
+      summary: List scheduled workflows for resource
+      description: Return workflows that have scheduled steps for the given resource
+        identifier.
+      parameters:
+      - name: resource-id
+        in: path
+        description: Identifier of the resource associated with the scheduled workflows
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowRepresentation'
+        "400":
+          description: Bad Request
+    parameters:
+    - name: realm
+      in: path
+      description: realm name (not id!)
+      required: true
+      schema:
+        type: string
+  /admin/realms/{realm}/workflows/{id}:
+    get:
+      tags:
+      - Workflows
+      summary: Get workflow
+      description: Get the workflow representation. Optionally exclude the workflow
+        id from the response.
+      parameters:
+      - name: includeId
+        in: query
+        description: Indicates whether the workflow id should be included in the representation
+          or not - defaults to true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                $ref: '#/components/schemas/WorkflowRepresentation'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowRepresentation'
+        "400":
+          description: Bad Request
+    put:
+      tags:
+      - Workflows
+      summary: Update workflow
+      description: Update the workflow configuration. This method does not update
+        the workflow steps.
+      requestBody:
+        content:
+          application/yaml:
+            schema:
+              $ref: '#/components/schemas/WorkflowRepresentation'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowRepresentation'
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+    delete:
+      tags:
+      - Workflows
+      summary: Delete workflow
+      description: Delete the workflow and its configuration.
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+    parameters:
+    - name: realm
+      in: path
+      description: realm name (not id!)
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: Workflow identifier
+      required: true
+      schema:
+        type: string
+  /admin/realms/{realm}/workflows/{id}/activate/{type}/{resourceId}:
+    post:
+      tags:
+      - Workflows
+      summary: Activate workflow for resource
+      description: Activate the workflow for the given resource type and identifier.
+        Optionally schedule the first step using the notBefore parameter.
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource identifier
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Resource type
+        required: true
+        schema:
+          type: object
+      - name: notBefore
+        in: query
+        description: "Optional value representing the time to schedule the first workflow\
+          \ step. The value is either an integer representing the seconds from now,\
+          \ an integer followed by 'ms' representing milliseconds from now, or an\
+          \ ISO-8601 date string."
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+    parameters:
+    - name: realm
+      in: path
+      description: realm name (not id!)
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: Workflow identifier
+      required: true
+      schema:
+        type: string
+  /admin/realms/{realm}/workflows/{id}/deactivate/{type}/{resourceId}:
+    post:
+      tags:
+      - Workflows
+      summary: Deactivate workflow for resource
+      description: Deactivate the workflow for the given resource type and identifier.
+      parameters:
+      - name: resourceId
+        in: path
+        description: Resource identifier
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: path
+        description: Resource type
+        required: true
+        schema:
+          type: object
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+    parameters:
+    - name: realm
+      in: path
+      description: realm name (not id!)
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      description: Workflow identifier
+      required: true
+      schema:
+        type: string
 components:
   schemas:
     AbstractPolicyRepresentation:
@@ -10385,8 +10949,6 @@ components:
           type: string
         phone_number_verified:
           type: boolean
-        address:
-          $ref: '#/components/schemas/AddressClaimSet'
         updated_at:
           format: int64
           type: integer
@@ -10418,21 +10980,6 @@ components:
         cnf:
           $ref: '#/components/schemas/Confirmation'
         scope:
-          type: string
-    AddressClaimSet:
-      type: object
-      properties:
-        formatted:
-          type: string
-        street_address:
-          type: string
-        locality:
-          type: string
-        region:
-          type: string
-        postal_code:
-          type: string
-        country:
           type: string
     AdminEventRepresentation:
       type: object
@@ -10750,6 +11297,8 @@ components:
           type: string
         kid:
           type: string
+        jwks:
+          type: string
     ClaimRepresentation:
       type: object
       properties:
@@ -10782,6 +11331,10 @@ components:
         count:
           format: int32
           type: integer
+        webOrigins:
+          type: array
+          items:
+            type: string
     ClientInitialAccessPresentation:
       type: object
       properties:
@@ -10829,14 +11382,18 @@ components:
         condition:
           type: string
         configuration:
-          type: array
+          description: Configuration settings as a JSON object
+          type: object
+          additionalProperties: true
     ClientPolicyExecutorRepresentation:
       type: object
       properties:
         executor:
           type: string
         configuration:
-          type: array
+          description: Configuration settings as a JSON object
+          type: object
+          additionalProperties: true
     ClientPolicyRepresentation:
       type: object
       properties:
@@ -11120,6 +11677,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigPropertyRepresentation'
+        clientProperties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfigPropertyRepresentation'
         metadata:
           type: object
           additionalProperties: {}
@@ -11242,12 +11803,6 @@ components:
       - UNANIMOUS
       - CONSENSUS
       type: string
-    EnforcementMode:
-      enum:
-      - PERMISSIVE
-      - ENFORCING
-      - DISABLED
-      type: string
     ErrorRepresentation:
       type: object
       properties:
@@ -11340,6 +11895,8 @@ components:
         id:
           type: string
         name:
+          type: string
+        description:
           type: string
         path:
           type: string
@@ -11442,8 +11999,6 @@ components:
           type: string
         phone_number_verified:
           type: boolean
-        address:
-          $ref: '#/components/schemas/AddressClaimSet'
         updated_at:
           format: int64
           type: integer
@@ -11521,38 +12076,13 @@ components:
           type: object
           additionalProperties:
             type: string
+        types:
+          type: array
+          items:
+            type: string
         updateProfileFirstLogin:
           type: boolean
           deprecated: true
-    InstallationAdapterConfig:
-      type: object
-      properties:
-        realm:
-          type: string
-        realm-public-key:
-          type: string
-        auth-server-url:
-          type: string
-        ssl-required:
-          type: string
-        bearer-only:
-          type: boolean
-        resource:
-          type: string
-        public-client:
-          type: boolean
-        verify-token-audience:
-          type: boolean
-        credentials:
-          type: object
-          additionalProperties: {}
-        use-resource-role-mappings:
-          type: boolean
-        confidential-port:
-          format: int32
-          type: integer
-        policy-enforcer:
-          $ref: '#/components/schemas/PolicyEnforcerConfig'
     KeyMetadataRepresentation:
       type: object
       properties:
@@ -11593,10 +12123,17 @@ components:
           type: string
         format:
           type: string
+        keySize:
+          format: int32
+          type: integer
+        validity:
+          format: int32
+          type: integer
     KeyUse:
       enum:
       - SIG
       - ENC
+      - JWT_SVID
       type: string
     KeysMetadataRepresentation:
       type: object
@@ -11659,6 +12196,8 @@ components:
               type: string
         userProfileMetadata:
           $ref: '#/components/schemas/UserProfileMetadata'
+        enabled:
+          type: boolean
         self:
           type: string
         origin:
@@ -11666,8 +12205,6 @@ components:
         createdTimestamp:
           format: int64
           type: integer
-        enabled:
-          type: boolean
         totp:
           type: boolean
         federationLink:
@@ -11735,17 +12272,6 @@ components:
       - UNMANAGED
       - MANAGED
       type: string
-    MethodConfig:
-      type: object
-      properties:
-        method:
-          type: string
-        scopes:
-          type: array
-          items:
-            type: string
-        scopes-enforcement-mode:
-          $ref: '#/components/schemas/ScopeEnforcementMode'
     MultivaluedHashMapStringComponentExportRepresentation:
       type: object
       additionalProperties:
@@ -11891,6 +12417,29 @@ components:
           type: string
         verified:
           type: boolean
+    OrganizationInvitationRepresentation:
+      type: object
+      properties:
+        id:
+          type: string
+        organizationId:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        sentDate:
+          format: int32
+          type: integer
+        expiresAt:
+          format: int32
+          type: integer
+        status:
+          $ref: '#/components/schemas/Status'
+        inviteLink:
+          type: string
     OrganizationRepresentation:
       type: object
       properties:
@@ -11925,47 +12474,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/IdentityProviderRepresentation'
-    PathCacheConfig:
-      type: object
-      properties:
-        max-entries:
-          format: int32
-          type: integer
-        lifespan:
-          format: int64
-          type: integer
-    PathConfig:
-      type: object
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-        path:
-          type: string
-        methods:
-          type: array
-          items:
-            $ref: '#/components/schemas/MethodConfig'
-        scopes:
-          type: array
-          items:
-            type: string
-        id:
-          type: string
-        enforcement-mode:
-          $ref: '#/components/schemas/EnforcementMode'
-        claim-information-point:
-          type: object
-          additionalProperties:
-            type: object
-            additionalProperties: {}
-        invalidated:
-          type: boolean
-        staticPath:
-          type: boolean
-        static:
-          type: boolean
     Permission:
       type: object
       properties:
@@ -11991,39 +12499,6 @@ components:
       - PERMISSIVE
       - DISABLED
       type: string
-    PolicyEnforcerConfig:
-      type: object
-      properties:
-        enforcement-mode:
-          $ref: '#/components/schemas/EnforcementMode'
-        paths:
-          type: array
-          items:
-            $ref: '#/components/schemas/PathConfig'
-        path-cache:
-          $ref: '#/components/schemas/PathCacheConfig'
-        lazy-load-paths:
-          type: boolean
-        on-deny-redirect-to:
-          type: string
-        user-managed-access:
-          $ref: '#/components/schemas/UserManagedAccessConfig'
-        claim-information-point:
-          type: object
-          additionalProperties:
-            type: object
-            additionalProperties: {}
-        http-method-as-scope:
-          type: boolean
-        realm:
-          type: string
-        auth-server-url:
-          type: string
-        credentials:
-          type: object
-          additionalProperties: {}
-        resource:
-          type: string
     PolicyEvaluationRequest:
       type: object
       properties:
@@ -12474,6 +12949,8 @@ components:
           type: array
           items:
             type: string
+        webAuthnPolicyPasswordlessPasskeysEnabled:
+          type: boolean
         clientProfiles:
           $ref: '#/components/schemas/ClientProfilesRepresentation'
         clientPolicies:
@@ -12653,12 +13130,6 @@ components:
           items:
             $ref: '#/components/schemas/ClientTemplateRepresentation'
           deprecated: true
-        oAuth2DeviceCodeLifespan:
-          format: int32
-          type: integer
-        oAuth2DevicePollingInterval:
-          format: int32
-          type: integer
     RequiredActionConfigInfoRepresentation:
       type: object
       properties:
@@ -12839,12 +13310,6 @@ components:
             items:
               $ref: '#/components/schemas/RoleRepresentation'
           deprecated: true
-    ScopeEnforcementMode:
-      enum:
-      - ALL
-      - ANY
-      - DISABLED
-      type: string
     ScopeMappingRepresentation:
       type: object
       properties:
@@ -12890,6 +13355,11 @@ components:
           type: string
         socialUsername:
           type: string
+    Status:
+      enum:
+      - PENDING
+      - EXPIRED
+      type: string
     UPAttribute:
       type: object
       properties:
@@ -12915,6 +13385,8 @@ components:
           type: string
         multivalued:
           type: boolean
+        defaultValue:
+          type: string
     UPAttributePermissions:
       type: object
       properties:
@@ -13040,8 +13512,6 @@ components:
         lastSync:
           format: int32
           type: integer
-    UserManagedAccessConfig:
-      type: object
     UserProfileAttributeGroupMetadata:
       type: object
       properties:
@@ -13077,6 +13547,8 @@ components:
           type: string
         multivalued:
           type: boolean
+        defaultValue:
+          type: string
     UserProfileMetadata:
       type: object
       properties:
@@ -13111,6 +13583,8 @@ components:
               type: string
         userProfileMetadata:
           $ref: '#/components/schemas/UserProfileMetadata'
+        enabled:
+          type: boolean
         self:
           type: string
         origin:
@@ -13118,8 +13592,6 @@ components:
         createdTimestamp:
           format: int64
           type: integer
-        enabled:
-          type: boolean
         totp:
           type: boolean
         federationLink:
@@ -13205,3 +13677,69 @@ components:
             type: string
         transientUser:
           type: boolean
+    WorkflowConcurrencyRepresentation:
+      type: object
+      properties:
+        cancel-in-progress:
+          type: string
+        restart-in-progress:
+          type: string
+    WorkflowRepresentation:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        enabled:
+          type: boolean
+        "on":
+          type: string
+        schedule:
+          $ref: '#/components/schemas/WorkflowScheduleRepresentation'
+        concurrency:
+          $ref: '#/components/schemas/WorkflowConcurrencyRepresentation'
+        if:
+          type: string
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowStepRepresentation'
+        state:
+          $ref: '#/components/schemas/WorkflowStateRepresentation'
+        with:
+          $ref: '#/components/schemas/MultivaluedHashMapStringString'
+        cancelInProgress:
+          type: string
+        restartInProgress:
+          type: string
+    WorkflowScheduleRepresentation:
+      type: object
+      properties:
+        after:
+          type: string
+        batch-size:
+          format: int32
+          type: integer
+    WorkflowStateRepresentation:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+    WorkflowStepRepresentation:
+      type: object
+      properties:
+        uses:
+          type: string
+        after:
+          type: string
+        scheduled-at:
+          format: int64
+          type: integer
+        id:
+          type: string
+          writeOnly: true
+        config:
+          $ref: '#/components/schemas/MultivaluedHashMapStringString'

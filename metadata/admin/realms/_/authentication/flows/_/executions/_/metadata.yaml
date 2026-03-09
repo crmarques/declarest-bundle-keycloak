@@ -1,0 +1,15 @@
+resource:
+  idAttribute: /id
+  aliasAttribute: /displayName
+operations:
+  create:
+    path: ./execution
+    transforms:
+    - jqExpression: . | .provider = .providerId
+    - excludeAttributes:
+      - /providerId
+  update:
+    path: ./
+  delete:
+    method: DELETE
+    path: /admin/realms/{{.realm}}/authentication/executions/{{.id}}

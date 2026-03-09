@@ -2,12 +2,13 @@ apiVersion: declarest.io/v1alpha1
 kind: MetadataBundle
 
 name: keycloak-bundle
-version: 0.0.1
+# Placeholder only. The release workflow stamps the real version into the published bundle.yaml.
+version: 0.0.0
 description: Metadata bundle for Keycloak Admin REST API.
 home: https://github.com/crmarques/declarest-bundle-keycloak
 sources:
   - https://github.com/crmarques/declarest-bundle-keycloak
-  - https://www.keycloak.org/docs-api/26.2.5/rest-api/openapi.yaml
+  - https://www.keycloak.org/docs-api/26.4.7/rest-api/openapi.yaml
 keywords:
   - declarest
   - keycloak
@@ -23,10 +24,9 @@ declarest:
   shorthand: keycloak-bundle
   metadataRoot: metadata
   openapi: openapi.yaml
-  metadataFileName: metadata.json
-  resourceFormat: json
+  metadataFileName: metadata.yaml
   compatibleDeclarest: ">=0.1.0"
-  compatibleResourceServer:
+  compatibleManagedServer:
     product: keycloak
     versions: ">=26.0.0 <27.0.0"
 
